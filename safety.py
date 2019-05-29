@@ -26,19 +26,17 @@ labels = pd.read_csv('~/Desktop/grab/safety/safety/labels/part-00000-e9445087-aa
 
 
 
-data_agg = train.groupby('bookingID', as_index=False)
-
-# .agg({
-#   "acceleration_x" : [min,max,"mean"],
-#   "acceleration_y" : [min,max,"mean"],
-#   "acceleration_z" : [min,max,"mean"],
-#   "gyro_x" :  [min,max,"mean"],
-#   "gyro_y" :  [min,max,"mean"],
-#   "gyro_z" :  [min,max,"mean"],
-#   "Speed"  :  [min,max,"mean"]
-# })
-# # data_agg.columns = data_agg.columns.droplevel(level=0)
-# data_agg.columns = data_agg.columns.map('_'.join)
+data_agg = train.groupby('bookingID', as_index=False).agg({
+  "acceleration_x" : [min,max,"mean"],
+  "acceleration_y" : [min,max,"mean"],
+  "acceleration_z" : [min,max,"mean"],
+  "gyro_x" :  [min,max,"mean"],
+  "gyro_y" :  [min,max,"mean"],
+  "gyro_z" :  [min,max,"mean"],
+  "Speed"  :  [min,max,"mean"]
+})
+# data_agg.columns = data_agg.columns.droplevel(level=0)
+data_agg.columns = data_agg.columns.map('_'.join)
 
 data_agg = data_agg.rename(columns = { "bookingID_" : "bookingID"})
 # print(data_agg.columns)
