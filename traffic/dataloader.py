@@ -3,7 +3,7 @@ import numpy as np
 
 class MapDataset(Dataset):
     """Face Landmarks dataset."""
-    def __init__(self, filename, tp_filename, look_back, look_forward, transform=None, train=True):
+    def __init__(self, mp_input , tp_input , look_back, look_forward, transform=None, train=True):
         """
         Args:
             filename        : Path to demand_map data
@@ -15,12 +15,16 @@ class MapDataset(Dataset):
         """
         # self.landmarks_frame = pd.read_csv(csv_file)
         ratio = 0.7
-        data = np.load(filename)
-        data = np.array(list(data))
+        if (isinstance(mp_input, str)) : 
+            data = np.load(mp_input)
+            data = np.array(list(data))
+        else : data = mp_input
 
-        tp_data = np.load(tp_filename) 
-        tp_data = np.array(list(tp_data))
-        
+        if (isinstance(tp_input, str) ) :
+            tp_data = np.load(tp_filename) 
+            tp_data = np.array(list(tp_data))
+        else : tp_data = tp_input
+
 
         idx_end = int( len(data) * ratio )
 
@@ -47,12 +51,22 @@ class MapDataset(Dataset):
         target  = idx + self.look_back 
         
         pred    = target + self.look_forward + 1
+
         # print(self.data[idx:target].shape)
         x = self.data[ idx : target]
-        x1 = self.tp_data[idx : target]
-        y = self.data[ pred - 1 : pred ]
+        x1 = self.tp_data[target]
+
+        y = self.data[ target + 1 : pred ]
 
         # print(x.size())
         return x, x1, y
+
+    def get_datashape(self) :
+        return self.data[0].shape
+
 if __name__ == "__main__": 
-    dataset = MapDataset('data_map.npy', 'data_tp.npy', train=True)
+    dataset = MapDataset('demand_map.npy', 'tp_data.npy', 8, 5, train=True)
+    print( dataset.get_datashape()[0])
+
+    data = next(iter(test_loader))
+    print(data)
