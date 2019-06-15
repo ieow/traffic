@@ -21,12 +21,14 @@ class PRED(nn.Module):
         self.conv2 = nn.Conv2d(32, 64, 2 , padding=1)
         self.conv3 = nn.Conv2d(64, 128, 2 , padding=1)
         self.conv4 = nn.Conv2d(128, 256, 2 , padding=1)
-        self.conv5 = nn.Conv2d(256, 512, 2 , padding=1)
+        # self.conv5 = nn.Conv2d(256, 512, 2 , padding=1)
 
         self.pool2d_2 = nn.MaxPool2d(2)
 
 
-        self.dense = nn.Linear( 5120 , self.total_node   )
+        self.dense = nn.Linear( 2304 , self.total_node   )
+        # self.dense2 = nn.Linear( self.total_node , self.look_forward * self.total_node   )
+
         self.convOut = nn.Conv2d( 1, look_forward, 3 , padding=1)
         self.convOut2 = nn.Conv2d( look_forward, look_forward, 3 , padding=1)
 
@@ -53,18 +55,19 @@ class PRED(nn.Module):
         x = F.relu(self.conv4(x))
         x = self.pool2d_2(x)
 
-        x = F.relu(self.conv5(x))
-        x = self.pool2d_2(x)
+        # x = F.relu(self.conv5(x))
+        # x = self.pool2d_2(x)
 
         x = x.view(x.size(0), -1)
         
         out = self.dense(x)
         # print(out.size())
+        # out =  self.dense2(out)
         out = out.reshape ( x.size(0), 1, self.data_shape[-2], self.data_shape[-1] )
         # out = F.relu(self.deconv4(out))
         # out = F.relu(self.deconv5(out))
         out = (self.convOut(out))
-        out = (self.convOut2(out))
+        out = F.relu(self.convOut2(out))
 
         return out
 
