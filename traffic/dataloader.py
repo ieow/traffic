@@ -3,7 +3,7 @@ import numpy as np
 
 class MapDataset(Dataset):
     """Face Landmarks dataset."""
-    def __init__(self, mp_input , tp_input , look_back, look_forward, transform=None, train=True):
+    def __init__(self, mp_input , tp_input , look_back, look_forward, ratio=0.7, transform=None, train=True):
         """
         Args:
             filename        : Path to demand_map data
@@ -14,7 +14,7 @@ class MapDataset(Dataset):
                 on a sample.
         """
         # self.landmarks_frame = pd.read_csv(csv_file)
-        ratio = 0.7
+        
         if (isinstance(mp_input, str)) : 
             data = np.load(mp_input)
             data = np.array(list(data))
