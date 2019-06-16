@@ -10,8 +10,10 @@ class MapDataset(Dataset):
             tp_filename     : Path to tp data 
             look_back       : look back data used as input
             look_forward    : forward prediction step 
+            ratio           : Train Test data ratio
             transform (callable, optional): Optional transform to be applied
                 on a sample.
+            train           : indicate Train or Test dataset
         """
         # self.landmarks_frame = pd.read_csv(csv_file)
         
@@ -50,13 +52,13 @@ class MapDataset(Dataset):
     def __getitem__(self, idx):
         target  = idx + self.look_back 
         
-        pred    = target + self.look_forward + 1
+        pred    = target + self.look_forward
 
-        # print(self.data[idx:target].shape)
         x = self.data[ idx : target]
-        x1 = self.tp_data[target]
 
-        y = self.data[ target + 1 : pred ]
+        # prediction time
+        x1 = self.tp_data[target]
+        y = self.data[ target : pred ]
 
         # print(x.size())
         return x, x1, y
