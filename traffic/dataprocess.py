@@ -121,27 +121,20 @@ class Traffic :
             df_temp = df_temp.set_index('geohash')
 
             if len(df) == 0 :
-                # df = df_temp
                 df['T+1'] = df_temp['demand']
-                # df.drop(['demand', 'longtitude', 'latitude'])
-                # df?
-
             else :
                 df[f'T+{i}'] = df_temp['demand']
-
+                
         return df
 
     def matrixToCoord (self, data) :
         total_coord = self.mat_x_max * self.mat_y_max 
-        print(total_coord)
-        # temp = np.zeros( (total_coord ,3 ) )
         temp = []
         for i in range(self.mat_x_max) :
             for j in range(self.mat_y_max) :
                 lat = i * self.lat_delta + self.lat_min
                 lon = j * self.long_delta + self.long_min
                 temp.append( [data[i][j] , lon, lat] )
-                # temp[ i*j + j] = [data[i][j] , lon, lat ]
         return temp
 
 
@@ -188,7 +181,6 @@ if __name__ == "__main__":
         tclass.saved_data = tf_data
         
         data_encoded = tclass.matrixToCoord(tf_data.iloc[0]['demand_map'] )
-        # print(data_encoded)
         df_data = pd.DataFrame (data_encoded, columns=[ 'demand_map', 'longtitude', 'latitude' ])
         df_data = tclass.geohash_encode(df_data)
 
@@ -216,21 +208,3 @@ if __name__ == "__main__":
         print (out)
 
 
-
-'''
-    data = preprocess(data_path)
-    # data.to_csv('./data_melt.csv')
-
-    # reorganize to np data
-    print('saving data')
-    npdata = data['demand_map'].values
-    npdata = np.array(list(npdata), dtype= np.float)
-    np.save( DIR + '/demand_map', npdata )
-    print ( f'demand map shape : {npdata.shape}')
-
-    tp_data = data[ ['day', 'timestamp']].values
-    tp_data = np.array(tp_data, dtype= np.float)
-    np.save( DIR + '/tp_data' , tp_data)
-    print ( f'tp data shape : {tp_data.shape}')
-    print('done')
-'''

@@ -14,10 +14,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from models.pred import PRED
 
 from utils import save_checkpoint
-# from utils.misc import LSIZE, RED_SIZE
-
 from utils import EarlyStopping
-# from utils.learning import ReduceLROnPlateau
 
 from dataloader import MapDataset
 from dataprocess import Traffic
@@ -40,7 +37,6 @@ def train(epoch, model, train_loader, optimizer ):
     """ One training epoch """
     model.train()
     device = next(model.parameters()).device
-    # dataset_train.load_next_buffer()
     train_loss = 0
     for batch_idx, data in enumerate(train_loader):
         data_x, data_tp, data_y =[ d.to(device, dtype=torch.float ) for d in data ]
@@ -65,7 +61,6 @@ def test(model, test_loader):
     """ One test epoch """
     model.eval()
     device = next(model.parameters()).device
-    # dataset_test.load_next_buffer()
     test_loss = 0
     test_l1   = 0
     with torch.no_grad():
@@ -157,7 +152,7 @@ class TrainTraffic () :
 
         data = self.tclass.geohash_decode(data)
         data = self.tclass.preprocess(data)
-        
+
         # data = self.tclass.saved_data
         
         npdata = data['demand_map'].values
@@ -297,33 +292,3 @@ if __name__ == "__main__":
     else :
         agent.train_model()
 
-
-
-        # dataset_train, batch_size=args.batch_size, shuffle=True, num_workers=2)
-        # data, data_tp, data_y = [  d.to(self.device, dtype=torch.float ) for d in next(iter(pred_loader)) ]
-        # model.eval()
-        # pred = model(data, data_tp)
-        # MAE = l1_function(pred, data_y) 
-        # MSE = loss_function(pred, data_y)
-
-        # print(f' MAE : {MAE}\n MSE : {MSE}')
-
-        # show_plot = True
-        # if (show_plot) :
-
-        #     import seaborn as sns
-        #     import matplotlib.pylab as plt
-        #     print(pred.shape)
-        #     pred = pred.cpu().detach().numpy()
-        #     data = data.cpu().detach().numpy()
-
-        #     fig, ax = plt.subplots(2,2)
-        #     for i in range(2):
-        #         for j in range(2):
-        #             ax[i, j].text(0.5, 0.5, str((i, j)),
-        #                         fontsize=18, ha='center')
-        #     sns.heatmap(data[2][-1], linewidth=0.5 , cmap="BuPu" , ax = ax[0,0]) 
-        #     sns.heatmap(pred[1][0], linewidth=0.5 , cmap="BuPu" , ax = ax[0,1]) 
-        #     sns.heatmap(data[5][-1], linewidth=0.5 , cmap="BuPu" , ax = ax[1,0]) 
-        #     sns.heatmap(pred[0][4], linewidth=0.5 , cmap="BuPu" , ax = ax[1,1]) 
-        #     plt.show()
