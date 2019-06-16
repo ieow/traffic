@@ -31,3 +31,7 @@ python traffic/trainpred.py --logdir <dir> --test --data_path <data_path>
 ```
 python traffic/trainpred.py --logdir <dir> --prediction --data_path <data_path>
 ```
+
+
+*Note : --timestamp option in trainpred to include timestamp in training
+        timestamp is not included in training by default as it perform similar loss but train slower.

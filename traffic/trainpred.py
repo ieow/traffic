@@ -99,7 +99,7 @@ class TrainTraffic () :
         self.DSHAPE = self.tclass.data_shape
         print(self.DSHAPE)
         # Model Instantiate 
-        self.model = PRED( self.LOOKBACK, self.LOOKFORWARD, self.DSHAPE ).to(self.device)
+        self.model = PRED( self.LOOKBACK, self.LOOKFORWARD, self.DSHAPE, concatTime=args.timestamp).to(self.device)
 
 
     def load_model(self, model, logdir ) :
@@ -266,6 +266,9 @@ if __name__ == "__main__":
                         help='specify prediction mode')
     parser.add_argument('--test', action='store_true',
                         help='specify test mode')
+    parser.add_argument('--timestamp', action='store_true',
+                        help='Include Timestamp as input for training and prediction')
+
 
     parser.add_argument('--data_path', type=str, 
                         help='path to data (csv) ')
